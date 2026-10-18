@@ -7,7 +7,7 @@ Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\
 
 $$ VEM(M, N) = 1 -\frac{1}{A}
 \max_{x}\sum_{i,j} a_{ij}\,x_{ij}
-\quad \text{s.t.} \sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}$$
+\quad \text{s.t.} \sum_j x_{ij} \le 1,~~ \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}$$
 
 The constraints ensure mappings between grains are one to one (or mapped to nothing in which case that grain would contribute 0 overlapping area). `VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
 
