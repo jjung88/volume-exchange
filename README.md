@@ -3,20 +3,24 @@ Repository containing the implementation of the volume exchange metric and compu
 
 The **Volume Exchange Metric** is a distance between two grain-labeled microstructure windows `M` and `N`. It finds the one-to-one matching of grains in `M` to grains in `N` that maximizes their total overlapping area, then reports the area left over:
 
-Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\in N$. Let $A$ represent the total area of a single window (i.e for $20\times 20$ windows, $A=400$)
-
+Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\in N$. Let $A$ represent the total pixel area of a single window (i.e for $20\times 20$ size windows, $A=400$)
 $$
-VEM(M, N) = 1 - \frac{1}{A}\max_{i,j} a_{ij}
+VEM(M, N) = 1 -\frac{1}{A}
+\max_{x}\sum_{i,j} a_{ij}\,x_{ij}
+\quad \text{s.t.} \quad \sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}
+
 $$
 
 `VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
+
+The constraint $``\sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}"$ ensures mappings between grains are one to one (or mapped to nothing in which case that grain would contribute 0 overlapping area)
 
 ## Repository layout
 
 ```
 volume-exchange/
 ├── src/
-│   └── Volume_Exchange.py           # VolumeExchangee metric + helper classes
+│   └── Volume_Exchange.py           # VolumeExchange metric + helper classes
 ├── example_data/
 │   └── window_dataset.npz           # example grain-labeled windows (~37 MB)
 ├── notebook_examples/
