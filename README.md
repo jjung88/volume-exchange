@@ -8,7 +8,6 @@ $$
 VEM(M, N) = 1 -\frac{1}{A}
 \max_{x}\sum_{i,j} a_{ij}\,x_{ij}
 \quad \text{s.t.} \quad \sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}
-
 $$
 
 `VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
