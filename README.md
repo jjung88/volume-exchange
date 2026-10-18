@@ -4,15 +4,14 @@ Repository containing the implementation of the volume exchange metric and compu
 The **Volume Exchange Metric** is a distance between two grain-labeled microstructure windows `M` and `N`. It finds the one-to-one matching of grains in `M` to grains in `N` that maximizes their total overlapping area, then reports the area left over:
 
 Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\in N$. Let $A$ represent the total pixel area of a single window (i.e for $20\times 20$ size windows, $A=400$)
-$$
-VEM(M, N) = 1 -\frac{1}{A}
+
+$$ VEM(M, N) = 1 -\frac{1}{A}
 \max_{x}\sum_{i,j} a_{ij}\,x_{ij}
-\quad \text{s.t.} \quad \sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}
-$$
+\quad \text{s.t.} \sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}$$
 
-`VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
+The constraints ensure mappings between grains are one to one (or mapped to nothing in which case that grain would contribute 0 overlapping area). `VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
 
-The constraint $``\sum_j x_{ij} \le 1,\;\; \sum_i x_{ij} \le 1,\;\; x_{ij}\in\{0,1\}"$ ensures mappings between grains are one to one (or mapped to nothing in which case that grain would contribute 0 overlapping area)
+
 
 ## Repository layout
 
@@ -55,7 +54,7 @@ import sys
 sys.path.append('src')
 from Volume_Exchange import VolumeExchange
 
-vem = VolumeExchange(data['EI1'][0], data['BI1'][0])
+vem = VolumeExchange(data['EI1'][0], data['EII1'][0])
 
 # Also get the overlaid structure and which area was matched
 vem, X_img, matched_mask = VolumeExchange(data['EI1'][0], data['BI1'][0], return_overlay=True)
@@ -74,7 +73,7 @@ With `return_overlay=True`, the function also returns `X_img` and `matched_mask`
 
 ### `02_volume-exchange.ipynb`
 
-**Pairwise dissimilarity matrix.** Picks `n = 10` random windows from each of two classes (`EI1`, `BI1`) and computes the `2n × 2n` volume exchange matrix. The first `n` rows/columns are the first class and the last `n` are the second.
+**Pairwise dissimilarity matrix.** Picks `n = 10` random windows from each of two classes (`EI1`, `EII1`) and computes the `2n × 2n` volume exchange matrix. The first `n` rows/columns are the first class and the last `n` are the second.
 
 ![Pairwise volume exchange matrix](docs/figures/dissimilarity_matrix.png)
 
@@ -84,7 +83,7 @@ Within-class pair (`EI1` vs `EI1`):
 
 ![Grain matching, within class](docs/figures/matching_within_class.png)
 
-Between-class pair (`EI1` vs `BI1`):
+Between-class pair (`EI1` vs `EII1`):
 
 ![Grain matching, between classes](docs/figures/matching_between_class.png)
 
