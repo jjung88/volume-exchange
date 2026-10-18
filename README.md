@@ -3,13 +3,13 @@ Repository containing the implementation of the volume exchange metric and compu
 
 The **Volume Exchange Metric** is a distance between two grain-labeled microstructure windows `M` and `N`. It finds the one-to-one matching of grains in `M` to grains in `N` that maximizes their total overlapping area, then reports the area left over:
 
-Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\in N$. 
+Let $a_{ij}$ represent the overlapping area between a grain $g_i\in M$ and $g_j\in N$. Let $A$ represent the total area of a single window (i.e for $20\times 20$ windows, $A=400$)
 
 $$
 VEM(M, N) = 1 - \frac{1}{A}\max_{i,j} a_{ij}
 $$
 
-`VE = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
+`VEM = 0` means the two windows have identical grain structure, and values closer to `1` mean the two windows have poor optimal matchings.
 
 ## Repository layout
 
@@ -52,10 +52,10 @@ import sys
 sys.path.append('src')
 from Volume_Exchange import VolumeExchange
 
-ve = VolumeExchange(data['EI1'][0], data['BI1'][0])
+vem = VolumeExchange(data['EI1'][0], data['BI1'][0])
 
 # Also get the overlaid structure and which area was matched
-ve, X_img, matched_mask = VolumeExchange(data['EI1'][0], data['BI1'][0], return_overlay=True)
+vem, X_img, matched_mask = VolumeExchange(data['EI1'][0], data['BI1'][0], return_overlay=True)
 ```
 
 ## How it works (`src/Volume_Exchange.py`)
@@ -63,9 +63,9 @@ ve, X_img, matched_mask = VolumeExchange(data['EI1'][0], data['BI1'][0], return_
 1. **Prime relabeling** – `MicrostructureCompute.create_microstructure` gives every grain in both windows its own prime number, drawn from one shared list (primes in `[10, 10000)`), so no two grains in `M` or `N` share a label.
 2. **Overlaid structure** – `compute_overlaid_structure` multiplies the two relabeled windows pixel-wise. Because prime factorizations are unique, each product `g_m * g_n` identifies exactly one intersection of a grain from `M` with a grain from `N`. The resulting window `X` has the grain boundaries of both windows.
 3. **Cost matrix** – entry `(i, j)` is the negative area fraction of `X` where grain `i` of `M` overlaps grain `j` of `N`. The matrix is zero-padded to be square when the windows have different grain counts.
-4. **Optimal matching** – `scipy.optimize.linear_sum_assignment` finds the matching with maximum total overlap, and `VE = 1 - total overlap`.
+4. **Optimal matching** – `scipy.optimize.linear_sum_assignment` finds the matching with maximum total overlap, and `VEM = 1 - total overlap`.
 
-With `return_overlay=True`, the function also returns `X_img` and `matched_mask`, a boolean mask of the overlap area of the matched grain pairs (padding pairs excluded). The area of `matched_mask` always equals `1 - VE`.
+With `return_overlay=True`, the function also returns `X_img` and `matched_mask`, a boolean mask of the overlap area of the matched grain pairs (padding pairs excluded). The area of `matched_mask` always equals `1 - VEM`.
 
 ## Notebooks
 
