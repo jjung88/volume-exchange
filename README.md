@@ -1,5 +1,8 @@
 # volume-exchange
-Repository containing the implementation of the volume exchange metric and computational experiments.
+Repository containing the implementation of the volume exchange metric and computational experiments. 
+
+**Link to Preprint**
+https://arxiv.org/abs/2610.26897
 
 The **Volume Exchange Metric** is a distance between two grain-labeled microstructure windows `M` and `N`. It finds the one-to-one matching of grains in `M` to grains in `N` that maximizes their total overlapping area, then reports the area left over:
 
